@@ -1,0 +1,49 @@
+# EtherChannel Configuration (PAgP & LACP)
+
+# Switch 1 Configuration
+enable
+configure terminal
+hostname SW1
+
+# PAgP Configuration
+interface range fa 0/1 - 2
+switchport mode trunk
+channel-group 1 mode desirable
+
+interface port-channel 1
+switchport mode trunk
+
+# LACP Configuration
+interface range fa 0/3 - 4
+switchport mode trunk
+channel-group 2 mode active
+
+interface port-channel 2
+switchport mode trunk
+
+
+# Switch 2 Configuration
+enable
+configure terminal
+hostname SW2
+
+# PAgP Configuration
+interface range fa 0/1 - 2
+switchport mode trunk
+channel-group 1 mode auto
+
+interface port-channel 1
+switchport mode trunk
+
+# LACP Configuration
+interface range fa 0/3 - 4
+switchport mode trunk
+channel-group 2 mode passive
+
+interface port-channel 2
+switchport mode trunk
+
+
+# Verification Commands
+show etherchannel summary
+show running-config
