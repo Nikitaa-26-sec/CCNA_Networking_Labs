@@ -1,0 +1,26 @@
+# DNS CONFIGURATION
+
+# Objective:
+To resolve domain names into IP addresses.
+
+# DNS Server Configuration:
+IP Address: 192.168.1.10
+Subnet Mask: 255.255.255.0
+Default Gateway: 192.168.1.1
+
+# DNS Record:
+Domain Name: www.networklab.com
+IP Address: 192.168.1.20
+
+# Client Configuration:
+IP Address: 192.168.1.100
+Subnet Mask: 255.255.255.0
+Gateway: 192.168.1.1
+DNS Server: 192.168.1.10
+
+# Verification:
+ping www.networklab.com
+nslookup www.networklab.com
+
+# Result:
+Domain name successfully resolved to IP address.
