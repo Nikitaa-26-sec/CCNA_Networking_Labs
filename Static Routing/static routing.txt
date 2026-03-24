@@ -1,0 +1,45 @@
+# STATIC ROUTING CONFIGURATION
+
+# Networks:
+R1 → 10.0.0.0
+R2 → 20.0.0.0
+
+# Configuration:
+
+## Router 1
+enable
+configure terminal
+hostname R1
+
+interface fa 0/0
+ip address 192.168.1.1 255.255.255.0
+no shutdown
+
+interface fa 0/1
+ip address 10.0.0.1 255.0.0.0
+no shutdown
+
+ip route 20.0.0.0 255.0.0.0 192.168.1.2
+
+
+## Router 2
+enable
+configure terminal
+hostname R2
+
+interface fa 0/0
+ip address 192.168.1.2 255.255.255.0
+no shutdown
+
+interface fa 0/1
+ip address 20.0.0.1 255.0.0.0
+no shutdown
+
+ip route 10.0.0.0 255.0.0.0 192.168.1.1
+
+# Verification:
+ ip route shown
+ping between networks is working
+
+# Result:
+Communication between networks achieved using static routes.
