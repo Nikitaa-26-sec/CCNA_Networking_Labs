@@ -1,0 +1,68 @@
+# INTER-VLAN ROUTING – ROUTER ON A STICK (ROAS)
+
+# Objective:
+To enable communication between multiple VLANs using a single router interface.
+
+# Devices Used:
+- 1 Router
+- 1 Switch
+- Multiple PCs
+
+# VLANs:
+VLAN 10 – HR
+VLAN 20 – SALES
+VLAN 30 – DEV
+
+# Configuration:
+
+## Router Configuration
+enable
+configure terminal
+hostname R1
+
+interface fa 0/0
+no shutdown
+
+interface fa 0/0.10
+encapsulation dot1q 10
+ip address 192.168.10.1 255.255.255.0
+
+interface fa 0/0.20
+encapsulation dot1q 20
+ip address 192.168.20.1 255.255.255.0
+
+interface fa 0/0.30
+encapsulation dot1q 30
+ip address 192.168.30.1 255.255.255.0
+
+## Switch Configuration
+enable
+configure terminal
+
+vlan 10
+name HR
+
+vlan 20
+name SALES
+
+vlan 30
+name DEV
+
+interface fa 0/1
+switchport mode trunk
+
+interface fa 0/2
+switchport access vlan 10
+
+interface fa 0/3
+switchport access vlan 20
+
+interface fa 0/4
+switchport access vlan 30
+
+# Result:
+Devices in different VLANs can communicate via router.
+
+# Verification:
+ping between VLAN PCs
+show vlan brief
