@@ -1,0 +1,316 @@
+
+ 1. Data Center Switch (DC Switch)
+
+
+enable
+configure terminal
+hostname Dc_Switch
+```
+
+---
+
+ 2. Core Switch Configuration
+
+
+enable
+configure terminal
+hostname Core_sw
+
+interface range fastethernet 0/5-12
+switchport trunk encapsulation dot1q
+switchport mode trunk
+```
+
+---
+
+ 3. VTP Configuration (Core Switch - Server)
+
+
+vtp mode server
+vtp version 2
+vtp domain ccna.com
+vtp password ccna123
+```
+
+---
+
+ 4. VLAN Creation (Core Switch)
+
+
+vlan 10
+name HR
+exit
+
+vlan 20
+name SALES
+exit
+
+vlan 30
+name DEV
+exit
+
+vlan 40
+name NETWORK
+exit
+
+vlan 50
+name TEST
+exit
+
+vlan 60
+name ACCOUNTS
+exit
+```
+
+---
+ 5. A Block Switch
+
+```bash
+enable
+configure terminal
+hostname A_Block
+
+interface range fa 0/1-4
+switchport mode trunk
+exit
+
+vtp mode client
+vtp version 2
+vtp domain ccna.com
+vtp password ccna123
+```
+
+### Access Ports (A Block)
+
+```bash
+interface fa 0/5
+switchport access vlan 10
+exit
+
+interface fa 0/6
+switchport access vlan 20
+exit
+
+interface fa 0/7
+switchport access vlan 30
+exit
+```
+
+---
+
+ 6. B Block Switch
+
+
+enable
+configure terminal
+hostname B_Block
+
+interface range fa 0/1-4
+switchport mode trunk
+exit
+
+vtp mode client
+vtp version 2
+vtp domain ccna.com
+vtp password ccna123
+```
+
+ Access Ports (B Block)
+
+
+interface fa 0/5
+switchport access vlan 40
+exit
+
+interface fa 0/6
+switchport access vlan 50
+exit
+
+interface fa 0/7
+switchport access vlan 60
+exit
+```
+
+---
+
+ 7. EtherChannel Configuration
+
+### DC Switch ↔ Core Switch (LACP)
+
+# DC Switch
+interface range fa 0/1-4
+channel-group 1 mode passive
+exit
+
+# Core Switch
+interface range fa 0/1-4
+channel-group 1 mode active
+exit
+```
+
+### A Block ↔ Core Switch (PAgP)
+
+```bash
+# A Block
+interface range fa 0/1-4
+channel-group 2 mode auto
+exit
+
+# Core Switch
+interface range fa 0/5-8
+channel-group 2 mode desirable
+exit
+```
+
+### B Block ↔ Core Switch (PAgP)
+
+```bash
+# B Block
+interface range fa 0/1-4
+channel-group 3 mode auto
+exit
+
+# Core Switch
+interface range fa 0/9-12
+channel-group 3 mode desirable
+exit
+```
+
+---
+
+ 8. Layer 3 Configuration (Core Switch)
+
+
+interface port-channel 1
+no switchport
+ip address 192.168.1.1 255.255.255.0
+
+interface fa 0/13
+no switchport
+ip address 192.168.2.1 255.255.255.0
+no shutdown
+```
+
+---
+
+ 9. SVI Configuration (Inter-VLAN Routing)
+
+interface vlan 10
+ip address 10.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+exit
+
+interface vlan 20
+ip address 20.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+exit
+
+interface vlan 30
+ip address 30.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+exit
+
+interface vlan 40
+ip address 40.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+exit
+
+interface vlan 50
+ip address 50.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+exit
+
+interface vlan 60
+ip address 60.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+exit
+```
+
+---
+
+ 10. C Block Router (Router-on-a-Stick)
+
+
+enable
+configure terminal
+hostname C_block_router
+
+interface fa 0/0
+ip address 192.168.2.2 255.255.255.0
+no shutdown
+exit
+
+interface fa 0/1.1
+encapsulation dot1q 70
+ip address 70.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+no shutdown
+exit
+
+interface fa 0/1.2
+encapsulation dot1q 80
+ip address 80.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+no shutdown
+exit
+
+interface fa 0/1.3
+encapsulation dot1q 90
+ip address 90.0.0.1 255.0.0.0
+ip helper-address 192.168.1.40
+no shutdown
+exit
+
+interface fa 0/1
+no shutdown
+```
+
+---
+
+ 11. C Block Switch
+
+
+enable
+configure terminal
+
+interface fa 0/1
+switchport mode trunk
+exit
+```
+
+ VLANs
+
+
+vlan 70
+name QL
+exit
+
+vlan 80
+name SUPPORT
+exit
+
+vlan 90
+name AUDIT
+exit
+```
+
+Access Ports
+
+
+interface fa 0/1
+switchport access vlan 70
+exit
+
+interface fa 0/2
+switchport access vlan 80
+exit
+
+interface fa 0/3
+switchport access vlan 90
+exit
+
+interface fa 0/4
+switchport mode trunk
+exit
+```
+
